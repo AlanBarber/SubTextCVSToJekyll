@@ -29,7 +29,7 @@ namespace SubTextCVSToJekyll
                 foreach (var post in blogPosts)
                 {
                     Console.WriteLine("  Writing post '" + post.Title + "'...");
-                    var writer = new JekyllWriter(post);
+                    var writer = new JekyllWriter(post) {ConvertHtmlToMarkdown = true};
                     writer.WriteToFile();
                 }
 
