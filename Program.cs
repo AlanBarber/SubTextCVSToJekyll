@@ -16,15 +16,13 @@ namespace SubTextCVSToJekyll
             {
                 Console.WriteLine("Opening file '" + args[0] + "'...");
                 var stream = new StreamReader(args[0]);
-                var csvConfig = new CsvConfiguration()
+                var csvConfig = new Configuration()
                 {
                     Delimiter = ",",
-                    HasHeaderRecord = true,
-                    QuoteNoFields = false,
-                    QuoteAllFields = false
+                    HasHeaderRecord = true
                 };
                 var csvReader = new CsvReader(stream, csvConfig);
-                var blogPosts = csvReader.GetRecords<SubTextCVSToJekyll.Subtext.Content>();
+                var blogPosts = csvReader.GetRecords<Subtext.Content>();
 
                 foreach (var post in blogPosts)
                 {

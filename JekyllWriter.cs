@@ -1,19 +1,10 @@
 ﻿using System.IO;
-using ReverseMarkdown;
 
 namespace SubTextCVSToJekyll
 {
     class JekyllWriter
     {
-        public JekyllWriter()
-        {
-            Content = null;
-            Path = null;
-            FileName = null;
-            ConvertHtmlToMarkdown = false;
-        }
-
-        public JekyllWriter(SubTextCVSToJekyll.Subtext.Content content)
+        public JekyllWriter(Subtext.Content content)
         {
             Content = content;
             ConvertHtmlToMarkdown = false;
@@ -22,7 +13,7 @@ namespace SubTextCVSToJekyll
             FileName = content.DateAdded.ToString("yyyy-MM-dd") + "-" + CleanEntryNameForFileName(content.EntryName.ToLower()) + ".md";
         }
 
-        public SubTextCVSToJekyll.Subtext.Content Content { get; set; }
+        public Subtext.Content Content { get; set; }
 
         public string Path { get; set; }
         public string FileName { get; set; }
@@ -42,9 +33,7 @@ namespace SubTextCVSToJekyll
             if (Content == null)
                 return string.Empty;
 
-            var redirectFrom = string.Format("/archive/{0}/{1}.aspx",
-                Content.DateAdded.ToString("yyyy/MM/dd"),
-                Content.EntryName);
+            var redirectFrom = $"/archive/{Content.DateAdded:yyyy/MM/dd}/{Content.EntryName}.aspx";
 
             string body;
             if (ConvertHtmlToMarkdown)
@@ -57,17 +46,7 @@ namespace SubTextCVSToJekyll
                 body = Content.Text;
             }
 
-            return string.Format("---\n" +
-                                 "title: \"{0}\"\n" +
-                                 "date: {1}\n" +
-                                 "layout: post\n" +
-                                 "redirect_from:\n" +
-                                 " - {2}\n" +
-                                 "---\n{3}",
-                                 Content.Title,
-                                 Content.DateAdded.ToString("yyyy-MM-dd"),
-                                 redirectFrom,
-                                 body);
+            return $"---\ntitle: \"{Content.Title}\"\ndate: {Content.DateAdded:yyyy-MM-dd}\nlayout: post\nredirect_from:\n - {redirectFrom}\n---\n{body}";
         }
 
         private string CleanEntryNameForFileName(string entryName)
